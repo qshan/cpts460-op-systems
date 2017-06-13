@@ -17,11 +17,46 @@ The first lab assignment was to create a booter program that would load a binary
 
 3. Print out partition information stored in the Master Boot Recor (MBR) of the virtual disk
 
+This program will ask for a users name and repeat it back to demonstrate our gets/printf is working as intended.
+
 
 ##### Shell script
-
+The shell script uses as86, bcc, then ld86 to compile a.out from the source files. Then we use dd to copy our executable to the vdisk Master Boot Record (first 512 bytes on the disk). Finally we call QEMU to launch a VM to boot our vdisk.
 
 ##### gets()/prints()
+When the booter runs there is no operating systemavailable to provide standard library functions like gets() or printf(), we've got the bios functionality to work with. Given a getc() and putc() in assembly like so:
 
+``` mipsasm
+    !------------------------------------------------------
+    !  char getc( )   function: return a char from keyboard
+    !------------------------------------------------------
+_getc:
+    xorb   ah,ah           ! clear ah
+    int    0x16            ! call BIOS to get a char in AX
+    andb   al,#0x7F        ! 7-bit ascii
+    ret
+
+    !---------------------------------------------------
+    ! int putc(char c)  function: print a char to screen
+    !---------------------------------------------------
+_putc:
+    push   bp
+    mov    bp,sp
+
+    movb   al,4[bp]        ! get the char into aL
+    movb   ah,#14          ! aH = 14
+    mov    bx,_color       ! cyan
+    int    0x10            ! call BIOS to display the char
+
+    pop    bp
+    ret
+```
+We can define prints()/gets() without too much hassle. we use a static array Remember that our parameters are pushed onto the stack in reverse order, thus when we enter printf() the first parameter is the format string, immediately followed on the stack by the other parameters. So in our printf we grab the address of the format string and then offset that address to the next parameters, from there we can keep incrementing this pointer to get to the next parameter for printf. Like so:
+
+``` C
+int *inptr = &fmt + 1;
+char *cp = fmt;
+```
 
 #### Print Partition Info
+To print the entries within the partition table first we load the MBR to a buffer, then we offset into that block by 446 bytes (or 0x1BE). From here we should have 4 partition structs detailing the partitions on the disk, we can print and increment our printer to read through them (at this point we wont worry about extended partitions).
