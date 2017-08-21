@@ -1,34 +1,15 @@
-the tswitch function
+tswitch and
 ======================
 
+### Lab Assignment 2
 
-460 Lab Assignment #2 : MTX System
-DUE: Week of 9-12-2016 : DEMO to TA in that week
+```
+Chapter 4
+```
+
+This lab was to demonstrate switching processes from within the kernel. tswitch() is an assembly function that in essence dumps the state of a process (the register values and such) to the stack, then proceeds to load a waiting process and it's state from that processes stack then resume executing.
+In this lab we had to develop a priority queue to hold process structs as well as the code to resume from switching.
 
 
-1. GIVEN: MTX4.4 and MTX4.5 code in Chapter 4 of the TEXT
-
-               2. REQUIREMENTS:
-
-2-1. Change tswitch() code (in ts.s) as specified in Problem 4.2:
-
-         _tswitch:
-         SAVE: push ax,bx,cx,dx,bp,si,di
-               pushf
-
-         ! ADD these lines, which saves CPU's SEGMENT registers
-               push ds
-               push ss
-         ! END of added lines
-
-               mov  bx, _running
-               mov  2[bx], _running
-         FIND: call scheduler
-
-         RESUME:
-
-DO THIS: Write your OWN RESUME code for tswitch()
-
-2-2. Use YOUR modified tswitch() function for the program MTX4.5,
-     Run the modified MTX4.5 but without the |t|c|z|a|p| commands,
-     just the |s|f|w|q| commands
+#### Print Partition Info
+To print the entries within the partition table first we load the MBR to a buffer, then we offset into that block by 446 bytes (or 0x1BE). From here we should have 4 partition structs detailing the partitions on the disk, we can print and increment our printer to read through them (at this point we wont worry about extended partitions).

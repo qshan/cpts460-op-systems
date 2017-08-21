@@ -14,10 +14,13 @@ The code from CptS 460 at WSU with K.C. Wang. This course covered booting, proce
 
 
 ##### A couple of notes:
-  * I teamed up with the awesome Daniel Johnson (@dj618) on the labs we were allowed to work in pairs.
   * All of these labs were run in QEMU on Linux, most include a simple script to compile and run the Lab (_look for mk or q_).
   * the vdisk (virtual disk) in each lab folder may have been corrupted at some point, I have saved a "backup" in the resources folder. (_There were multiple versions of the vdisk during the course so that file still may not work for all labs._)
 
 ##### Setup
 
 You will need to install bin86, bcc and qemu to get this code to compile and run correctly.
+
+##### Credits
+* K.C. Wang provided a large amount of starter code for his assignments, then asked us to build upon it.
+* I teamed up with the Daniel Johnson (@dj618) on the labs we were allowed to work in pairs (I'll try to update the relevant comment blocks).
